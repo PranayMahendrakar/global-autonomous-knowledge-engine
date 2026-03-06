@@ -1,0 +1,162 @@
+# Global Autonomous Knowledge Engine - Configuration
+# Copy this file and customize for your deployment
+
+# ============================================================
+# Logging
+# ============================================================
+log_level: INFO
+log_file: logs/gake.log
+
+# ============================================================
+# API Server
+# ============================================================
+enable_api: true
+api_host: "0.0.0.0"
+api_port: 8080
+
+# ============================================================
+# Storage
+# ============================================================
+data_dir: data
+checkpoint_dir: checkpoints
+
+# Maintenance cycle (seconds) - default: 24 hours
+maintenance_interval_seconds: 86400
+
+# ============================================================
+# Discovery Configuration
+# ============================================================
+discovery:
+  # How often to run discovery (seconds) - default: 5 minutes
+  interval_seconds: 300
+  
+  # Maximum concurrent discovery agents
+  max_concurrent_agents: 10
+  
+  # Active knowledge sources
+  sources:
+    - arxiv
+    - semantic_scholar
+    - github
+    - wikipedia
+    # - news          # Requires NEWS_API_KEY environment variable
+    # - web_crawler   # General web crawling
+  
+  # ArXiv categories to monitor
+  arxiv_categories:
+    - cs.AI     # Artificial Intelligence
+    - cs.LG     # Machine Learning
+    - cs.CL     # Computation and Language (NLP)
+    - cs.RO     # Robotics
+    - cs.CV     # Computer Vision
+    - cs.NE     # Neural and Evolutionary Computing
+    - stat.ML   # Statistics - Machine Learning
+  
+  # Papers per discovery cycle
+  max_papers_per_cycle: 100
+  
+  # Web pages per discovery cycle
+  max_web_pages_per_cycle: 50
+  
+  # GitHub topics to track
+  github_topics:
+    - machine-learning
+    - artificial-intelligence
+    - deep-learning
+    - natural-language-processing
+    - computer-vision
+    - robotics
+    - knowledge-graph
+    - large-language-models
+
+# ============================================================
+# Knowledge Extraction Configuration
+# ============================================================
+extraction:
+  # spaCy NLP model
+  model_name: en_core_web_sm   # Use en_core_web_trf for better accuracy
+  
+  # Relation extraction model
+  relation_extraction_model: bert-base-uncased
+  
+  # Minimum confidence for extracted knowledge
+  min_confidence: 0.6
+  
+  # Maximum entities per document
+  max_entities_per_doc: 50
+  
+  # What to extract
+  extract_relations: true
+  extract_events: true
+  extract_concepts: true
+  
+  # Batch size for model inference
+  batch_size: 16
+  
+  # Use LLM for extraction (requires API key)
+  use_llm_extraction: false
+  llm_model: gpt-4
+
+# ============================================================
+# Knowledge Graph Configuration
+# ============================================================
+graph:
+  # Backend: networkx (dev) | neo4j (prod) | rdflib (semantic)
+  backend: networkx
+  
+  # Persistence path for NetworkX backend
+  persistence_path: data/knowledge_graph.pkl
+  
+  # Neo4j connection (if using neo4j backend)
+  neo4j_uri: bolt://localhost:7687
+  neo4j_user: neo4j
+  # neo4j_password: set via NEO4J_PASSWORD environment variable
+  
+  # Graph size limits
+  max_nodes: 1000000
+  max_edges: 5000000
+  
+  # Graph embeddings
+  enable_embeddings: true
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  embedding_dimension: 384
+
+# ============================================================
+# Knowledge Validation Configuration
+# ============================================================
+validation:
+  # Minimum sources required for validation
+  min_source_count: 1
+  
+  # Overall confidence threshold
+  confidence_threshold: 0.5
+  
+  # Validation strategies
+  enable_cross_validation: true
+  enable_temporal_validation: true
+  enable_logical_consistency: true
+  contradiction_detection: true
+
+# ============================================================
+# Continuous Learning Configuration
+# ============================================================
+learning:
+  # How often to run learning cycle (seconds) - default: 1 hour
+  interval_seconds: 3600
+  
+  # Learning capabilities
+  enable_concept_discovery: true
+  enable_relation_inference: true
+  enable_knowledge_evolution: true
+  
+  # Graph embedding model (TransE, RotatE, ComplEx, DistMult)
+  graph_embedding_model: TransE
+  
+  # Training epochs for graph embeddings
+  embedding_epochs: 100
+  
+  # Link prediction confidence threshold
+  link_prediction_threshold: 0.75
+  
+  # Cluster related concepts
+  cluster_new_concepts: true
